@@ -55,8 +55,8 @@ classdef Chart
                 beta   = chart.segments(i).beta;
                 end_angle = start_angle + beta;
 
-                theta_vals = start_angle:res:end_angle;
-                Theta_vals = [Theta_vals, theta_vals];
+                theta_vals = (start_angle:res:end_angle) - start_angle;
+                Theta_vals = [Theta_vals, theta_vals + start_angle];
 
                 s_func = double(subs(chart.segments(i).s_func, theta, theta_vals));
                 v_func = double(subs(chart.segments(i).v_func, theta, theta_vals));
