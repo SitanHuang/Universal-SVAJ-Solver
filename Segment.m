@@ -56,7 +56,6 @@ classdef Segment
             % Add initial condition at angle=rad, s, v, a, j.
             % Use nan for unspecified initial conditions.
             seg.ics = [seg.ics; deg2rad(deg) s v a j];
-            seg.ics
         end
 
         function seg = solve(seg)
