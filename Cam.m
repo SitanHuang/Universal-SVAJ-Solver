@@ -125,6 +125,30 @@ classdef Cam
             x = R_theta .* cos(Theta_vals);
             y = R_theta .* sin(Theta_vals);
             z = zeros(size(x));
+
+            % Deduplicate with 0.1% in position as tolerance
+            data = [x(:), y(:), z(:)];
+            n = size(data, 1);
+            to_remove = false(n, 1);
+        
+            for i = 1:n
+                for j = i+1:n
+                    if to_remove(j), continue; end
+                    vec1 = data(i, :);
+                    vec2 = data(j, :);
+                    dist = norm(vec1 - vec2);
+                    thresh = 0.001 * min(norm(vec1), norm(vec2));
+        
+                    if dist < thresh
+                        to_remove(j) = true;
+                    end
+                end
+            end
+        
+            data(to_remove, :) = [];
+            x = data(:, 1);
+            y = data(:, 2);
+            z = data(:, 3);
         end
     end
 end

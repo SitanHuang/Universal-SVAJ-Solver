@@ -39,10 +39,16 @@ classdef Segment
     end
 
     methods (Static)
-        function seg = dwell(beta)
-            seg = Segment(beta) ...
-                .add_ic(   0,      0,    nan,    nan,  nan) ...
-                .add_ic(beta,      0,    nan,    nan,  nan);
+        function seg = dwell(beta, const)
+            if nargin == 2
+                seg = Segment(beta) ...
+                    .add_ic(   0,  const,    nan,    nan,  nan) ...
+                    .add_ic(beta,  const,    nan,    nan,  nan);
+            else
+                seg = Segment(beta) ...
+                    .add_ic(   0,      0,    nan,    nan,  nan) ...
+                    .add_ic(beta,      0,    nan,    nan,  nan);
+            end
         end
     end
 
