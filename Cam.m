@@ -56,6 +56,42 @@ classdef Cam
             end
         end
 
+        function [thetas, s, v, a, j] = raw(cam, resolution)
+            % Get the s, v, a, j values of all segments (unnormalized wrt. omega)
+            % and the corresponding thetas of each index
+            resolution = deg2rad(resolution);
+
+            syms theta;
+        
+            thetas = [];
+
+            s = [];
+            v = [];
+            a = [];
+            j = [];
+
+            start_angle = 0;
+            for i = 1:length(cam.segments)
+                beta = cam.segments(i).beta;
+                end_angle = start_angle + beta;
+
+                theta_vals = (start_angle:resolution:end_angle) - start_angle;
+                thetas = [thetas, theta_vals + start_angle];
+
+                s_func = double(subs(cam.segments(i).s_func, theta, theta_vals));
+                v_func = double(subs(cam.segments(i).v_func, theta, theta_vals));
+                a_func = double(subs(cam.segments(i).a_func, theta, theta_vals));
+                j_func = double(subs(cam.segments(i).j_func, theta, theta_vals));
+
+                s = [s, s_func];
+                v = [v, v_func];
+                a = [a, a_func];
+                j = [j, j_func];
+
+                start_angle = end_angle;
+            end
+        end
+
         function [x, y, z] = cam_profile(cam, Rb, resolution)
             % Generate x, y, z coordinates for Solidworks curve of the
             % Cam Profile with specified resolution in degrees and base
